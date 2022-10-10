@@ -1,0 +1,250 @@
+openapi: 3.0.1
+info:
+  title: Emarket - Marketing HTTP API
+  description: The Marketing Service HTTP API
+  version: v1
+servers:
+  - url: /marketing-api
+paths:
+  /api/v1/campaigns:
+    get:
+      tags:
+        - Campaigns
+      operationId: "getCampaignList"            
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CampaignDTO'
+                nullable: true    
+    post:
+      tags:
+        - Campaigns
+      operationId: "postCampaign"
+      description: Create new campaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCampaignDTO'      
+      responses:
+        '201':
+          description: Create OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignDTO'
+  /api/v1/campaigns/{id}:
+    put:
+      tags:
+        - Campaigns
+      operationId: "putCampaign"
+      description: Update a campaign with the specified id
+      parameters: 
+        - name: id
+          in: path
+          description: Campaign ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCampaignDTO'            
+      responses:
+        '200':
+          description: OK    
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignDTO'
+        '404':
+          description: No campaign with the specified id     
+  
+  /api/v1/diarys:
+    get:
+      tags:
+        - Diary
+      operationId: "getDiaryList"            
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiaryDTO'
+                nullable: true      
+    post:
+      tags:
+        - Diary
+      operationId: "postDiary"
+      description: Create new diary
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiaryDTO'      
+      responses:
+        '201':
+          description: Create OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiaryDTO' 
+  /api/v1/diarys/{id}:   
+    put:
+      tags:
+        - Diary
+      operationId: "putDiary"
+      description: Update a diary with the specified id
+      parameters: 
+        - name: id
+          in: path
+          description: Diary ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiaryDTO'            
+      responses:
+        '200':
+          description: OK    
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiaryDTO'
+        '404':
+          description: No campaign with the specified id    
+    delete:
+      tags:
+        - Diary
+      summary: Deletes a diary
+      description: delete a diary
+      operationId: "deleteDiary"
+      parameters:
+        - name: id
+          in: path
+          description: Diary ID
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK    
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int32   
+        '400':
+          description: Invalid diary ID value
+components:
+  schemas:
+    CampaignDTO:
+      type: object
+      required: 
+        - id
+        - name
+        - description
+      properties:
+        id:
+          description: Campaign ID
+          type: integer
+          format: int32
+          example: 100
+        name:
+          description: Campaign name
+          type: string
+          example: 'Campaign 2022'
+        description:
+          description: Campaign description
+          type: string
+          example: 'New Sale Campaign in 2022'
+        From:
+          description: Campaign start date/time
+          type: string
+          format: date-time
+          example: '2022-05-18T05:01:43+09:00'
+        to:
+          description: Campaign end date/time
+          type: string
+          format: date-time
+          example: '2022-06-17T05:01:43+09:00'
+        pictureUri: 
+          description: Campaign banner image URL
+          type: string
+          example: '/images/banner-2.png'
+        detailsUri:
+          description: Campaign detail image URL
+          type: string
+          example: '/images/detail-2.png'
+    NewCampaignDTO:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          description: Campaign name
+          type: string
+          example: 'Campaign 2022'
+        description:
+          description: Campaign description
+          type: string
+          example: 'Brand New Campaign in 2022'
+        From:
+          description: Campaign start date/time
+          type: string
+          format: date-time
+          example: '2022-05-18T05:01:43+09:00'
+        to:
+          description: Campaign end date/time
+          type: string
+          format: date-time
+          example: '2022-06-17T05:01:43+09:00'
+        pictureUri:
+          description: Campaign banner image URL
+          type: string
+          example: '/images/banner1.png'
+        detailsUri:
+          description: Campaign detail image URL
+          type: string  
+          example: '/images/detail1.png'
+          
+    DiaryDTO:
+      type: object
+      required: 
+        - id
+        - date      
+      properties:
+        id:
+          description: Diary ID
+          type: integer
+          format: int32
+          example: 1
+        date:
+          description: Diary date
+          type: string
+          example: '2022.10.01'
+        content:
+          description: Diary content
+          type: string
+          example: '오늘은 기분이 좋은 날입니다.'
+        emotion:
+          description: Diary emotion
+          type: integer
+          format: int32          
+          example: 3
